@@ -11,6 +11,10 @@
 #include <asio.hpp>
 #include <asio/experimental/parallel_group.hpp>
 
+// Forward declaration
+static std::vector<const char *> str_to_char_pointer(
+    const std::vector<std::string> &string_vector);
+
 PgConnection::PgConnection(asio::io_context &ctx,
                            const std::string &conn_string) {
     conn_ = PQconnectStart(conn_string.c_str());
@@ -136,17 +140,6 @@ PgConnection::query_prepared(const std::string &statement_name,
     co_return co_await read_results();
 }
 
-std::vector<const char *> PgConnection::str_to_char_pointer(
-    const std::vector<std::string> &string_vector) {
-    std::vector<const char *> char_pointer_vector;
-    char_pointer_vector.reserve(string_vector.size());
-
-    for (const std::string &param : string_vector) {
-        char_pointer_vector.push_back(param.c_str());
-    }
-    return char_pointer_vector;
-}
-
 asio::awaitable<void> PgConnection::connect() {
     while (true) {
         PostgresPollingStatusType status = PQconnectPoll(conn_);
@@ -259,4 +252,15 @@ asio::awaitable<bool> PgConnection::wait_read_or_write() {
         throw std::runtime_error(write_err.message());
     }
     co_return false;
+}
+
+static std::vector<const char *> str_to_char_pointer(
+    const std::vector<std::string> &string_vector) {
+    std::vector<const char *> char_pointer_vector;
+    char_pointer_vector.reserve(string_vector.size());
+
+    for (const std::string &param : string_vector) {
+        char_pointer_vector.push_back(param.c_str());
+    }
+    return char_pointer_vector;
 }

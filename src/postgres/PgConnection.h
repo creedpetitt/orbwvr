@@ -28,9 +28,6 @@ class PgConnection {
 
     asio::awaitable<bool> wait_read_or_write();
 
-    std::vector<const char *>
-    static str_to_char_pointer(const std::vector<std::string> &string_vector);
-
   public:
     PgConnection(asio::io_context &ctx, const std::string &conn_string);
     PgConnection(const PgConnection &other) = delete;
