@@ -15,7 +15,7 @@ FetchContent_MakeAvailable(asio)
 find_package(Threads REQUIRED)
 find_package(PostgreSQL REQUIRED)
 
-add_executable(orbwvr main.cpp src/postgres/PgConnection.cpp src/postgres/PgResult.cpp src/database.cpp src/result.cpp) 
+add_library(orbwvr src/postgres/PgConnection.cpp src/postgres/PgResult.cpp src/database.cpp src/result.cpp src/field.cpp src/row.cpp) 
 
 target_compile_definitions(orbwvr PUBLIC ASIO_STANDALONE)
 
@@ -23,3 +23,6 @@ target_include_directories(orbwvr PUBLIC ${asio_SOURCE_DIR}/asio/include
                                         ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 target_link_libraries(orbwvr PUBLIC Threads::Threads PostgreSQL::PostgreSQL)
+
+add_executable(orbwvr_example examples/basic.cpp)
+target_link_libraries(orbwvr_example PRIVATE orbwvr)
