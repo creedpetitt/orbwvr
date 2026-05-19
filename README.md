@@ -34,12 +34,14 @@ target_link_libraries(your_target_name PRIVATE orbwvr)
 
 ## Usage
 
-Orbwvr exposes an asynchronous API that must be awaited within a coroutine context. The `database` class manages the connection pool and underlying Asio execution context.
+Orbwvr exposes an asynchronous API that must be awaited within a coroutine context. Simply include the `"orbwvr.h"` header to use the library.   
+
+Because the C++ standard forbids the `main()` function from being a coroutine, Orbwvr provides a `sync_wait` utility. This function blocks the calling thread until the provided coroutine completes, acting as the bridge between your synchronous entry point and your asynchronous database logic.
 
 Here is a basic example (from `examples/basic.cpp`):
 
 ```cpp
-#include "orbwvr/database.h"
+#include "orbwvr.h"
 
 #include <exception>
 #include <iostream>
