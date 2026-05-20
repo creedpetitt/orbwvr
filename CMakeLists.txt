@@ -24,8 +24,10 @@ target_include_directories(orbwvr PUBLIC ${asio_SOURCE_DIR}/asio/include
 
 target_link_libraries(orbwvr PUBLIC Threads::Threads PostgreSQL::PostgreSQL)
 
-add_executable(orbwvr_example examples/basic.cpp)
-target_link_libraries(orbwvr_example PRIVATE orbwvr)
+if(PROJECT_IS_TOP_LEVEL)
+    add_executable(orbwvr_example examples/basic.cpp)
+    target_link_libraries(orbwvr_example PRIVATE orbwvr)
 
-add_executable(orbwvr_example_advanced examples/advanced.cpp)
-target_link_libraries(orbwvr_example_advanced PRIVATE orbwvr)
+    add_executable(orbwvr_example_advanced examples/advanced.cpp)
+    target_link_libraries(orbwvr_example_advanced PRIVATE orbwvr)
+endif()
